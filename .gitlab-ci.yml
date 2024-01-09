@@ -1,0 +1,31 @@
+variables:
+  IMG: $CI_REGISTRY_IMAGE/otb-prefetch-cpu-dev:latest
+stages:
+  - build
+  - test
+ 
+.build_base:
+  stage: build
+  image: docker:latest
+  allow_failure: false
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - name: docker:dind
+      entrypoint: ["dockerd-entrypoint.sh", "--tls=false"]
+  before_script:
+    - echo -n $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+
+Build:
+  extends: .build_base
+  script:
+    - docker build --tag $IMG -f tests/dockerfile .
+    - docker push $IMG
+
+Test:
+  stage: test
+  allow_failure: false
+  image: $CI_REGISTRY_IMAGE/otb-prefetch-cpu-dev:latest
+  script:
+    - python /src/otb/otb/Modules/Remote/Prefetch/test/tests.py
