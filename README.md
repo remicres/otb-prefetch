@@ -40,7 +40,7 @@ is a good read.
 
 ## Build from source
 
-You can build the remote module
+You have to build the remote module from sources. 
 Give a try with one [otbtf development docker image](https://hub.docker.com/layers/mdl4eo/otbtf/4.3.0-cpu-dev/images/sha256-8772aac279ae0c2bb390501aa14c490d481e703273bb5c72a49701233f342909?context=explore):
 
 ```commandLine
