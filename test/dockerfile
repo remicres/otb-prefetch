@@ -6,4 +6,4 @@ RUN cd /src/otb/otb/Modules/Remote \
  && cmake /src/otb/otb -DModule_OTBPrefetch=ON \
  && make install -j8
 USER otbuser
-
+RUN pip install pyotb planetary_computer
