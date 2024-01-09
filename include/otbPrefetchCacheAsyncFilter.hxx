@@ -31,6 +31,7 @@ PrefetchCacheAsyncFilter<TOutputImage>::PrefetchCacheAsyncFilter()
   m_NbOfProcessedPixels = 0;
   m_ExtraGuesses = 0;
   m_GoodGuesses = 0;
+  m_WaitSecs = 0;
 }
 
 
@@ -53,6 +54,7 @@ PrefetchCacheAsyncFilter<TOutputImage>::~PrefetchCacheAsyncFilter()
   otbWarningMacro(<< m_MissedGuesses << " missing guessed pixels (" << percentMissed << " %)");
   otbWarningMacro(<< m_GoodGuesses << " good guessed pixels (" << percentGood << " %)");
   otbWarningMacro(<< m_ExtraGuesses << " extra guessed pixels (" << percentExtra << " %)");
+  otbWarningMacro(<< "Total wait: " << m_WaitSecs << "s");
 }
 
 
@@ -310,8 +312,12 @@ PrefetchCacheAsyncFilter<TOutputImage>::GenerateData()
   otbDebugMacro(<< "Waiting thread...");
   if (m_Thread.joinable())
   {
+    auto start{std::chrono::steady_clock::now()};
     otbDebugMacro(<< "Thread is running");
     m_Thread.join();
+    auto end{std::chrono::steady_clock::now()};
+    const std::chrono::duration<float> elapsed_seconds{end - start};
+    m_WaitSecs += elapsed_seconds.count();
   }
   otbDebugMacro(<< "Waiting thread...done");
 
