@@ -22,6 +22,22 @@ infer = pyotb.TensorflowModelServe(prefetch, ...)
 infer.write("output.tif")
 ```
 
+After the execution, the filter display some performance metrics:
+
+```commandLine
+PrefetchCacheAsyncFilter (0x563812708470): 7.0272e+06 missing guessed pixels (4.68247 %)
+PrefetchCacheAsyncFilter (0x563812708470): 1.43047e+08 good guessed pixels (95.3175 %)
+PrefetchCacheAsyncFilter (0x563812708470): 351360 extra guessed pixels (0.234123 %)
+PrefetchCacheAsyncFilter (0x563812708470): Total wait: 0.000963238s
+```
+
+We can see that less that 1ms has bee spent between the GPU calls, saving us some money! 
+(for information the input is a Sentinel-2 file in COG format from Microsoft Planetary Computer, 
+processed with a `streaming:type=tiled` strategy on the OTB writer). If you want to know 
+more about OTB/GDAL writing strategies, [this](https://wiki.orfeo-toolbox.org/index.php/Writing_large_images) 
+is a good read.
+
+
 ## Build from source
 
 You can build the remote module
@@ -48,3 +64,8 @@ Apache 2.0
 # Contact
 
 Remi Cresson at INRAE
+
+# Acknowledgements
+
+- Bradley Lowekamp
+- OTB Dev team 
