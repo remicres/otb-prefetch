@@ -20,7 +20,7 @@ stages:
 Build:
   extends: .build_base
   script:
-    - docker build --tag $IMG -f tests/dockerfile .
+    - docker build --tag $IMG -f test/dockerfile .
     - docker push $IMG
 
 Test:
