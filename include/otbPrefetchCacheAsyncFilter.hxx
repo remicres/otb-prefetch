@@ -67,11 +67,7 @@ PrefetchCacheAsyncFilter<TOutputImage>::GenerateOutputInformation(void)
 {
 
   typename TOutputImage::Pointer outputPtr = this->GetOutput();
-  unsigned int nBands;
-  {
-    std::lock_guard<std::mutex> guard(m_Mutex);
-    nBands = GetInput()->GetNumberOfComponentsPerPixel();
-  }
+  unsigned int nBands = GetInput()->GetNumberOfComponentsPerPixel();
   outputPtr->SetNumberOfComponentsPerPixel(nBands);
   outputPtr->SetLargestPossibleRegion(GetInput()->GetLargestPossibleRegion());
   outputPtr->SetOrigin(GetInput()->GetOrigin());
@@ -89,8 +85,6 @@ template <class TOutputImage>
 void
 PrefetchCacheAsyncFilter<TOutputImage>::GetImageRegion(RegionType & region, typename TOutputImage::Pointer & buffer)
 {
-  std::lock_guard<std::mutex> guard(m_Mutex);
-
   otbDebugMacro(<< "Entering GetImageRegion() for region start " << region.GetIndex() << " size " << region.GetSize());
   
   // Trigger upstream pipeline
@@ -184,7 +178,6 @@ PrefetchCacheAsyncFilter<TOutputImage>::GuessNextRegion(RegionType & generatedRe
   }
   m_CachedRegion = RegionType(start, size);
 
-  std::lock_guard<std::mutex> guard(m_Mutex);
   return m_CachedRegion.Crop(GetInput()->GetLargestPossibleRegion());
   
 }
@@ -343,11 +336,7 @@ PrefetchCacheAsyncFilter<TOutputImage>::GenerateData()
   
   // Prepare the output buffer
   otbDebugMacro(<< "Prepare the output buffer");
-  unsigned int nBands;
-  {
-    std::lock_guard<std::mutex> guard(m_Mutex);
-    nBands = GetInput()->GetNumberOfComponentsPerPixel();
-  }
+  unsigned int nBands = GetInput()->GetNumberOfComponentsPerPixel();
   outputPtr->SetBufferedRegion(outputReqRegion);
   outputPtr->SetNumberOfComponentsPerPixel(nBands);
   outputPtr->Allocate();

@@ -23,7 +23,6 @@
 
 #include <thread>
 #include <vector>
-#include <mutex>
 #include <chrono>
 
 namespace otb
@@ -129,7 +128,6 @@ private:
   float m_GoodGuesses;
   float m_NbOfProcessedPixels;
   float m_WaitSecs;
-  std::mutex m_Mutex;
 
   
 }; // end class
