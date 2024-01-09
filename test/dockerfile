@@ -1,0 +1,9 @@
+FROM mdl4eo/otbtf:4.3.0-cpu-dev
+USER root
+COPY . /src/otb/otb/Modules/Remote/Prefetch
+RUN cd /src/otb/otb/Modules/Remote \
+ && cd /src/otb/build/OTB/build \
+ && cmake /src/otb/otb -DModule_OTBPrefetch=ON \
+ && make install -j8
+USER otbuser
+
