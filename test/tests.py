@@ -20,10 +20,10 @@ b4_href = item.assets["B04"].href
 
 apps = [
   partial(pyotb.Smoothing, type="mean", type_mean_radius=32),
-#  partial(pyotb.Smoothing, type="gaussian"),
-#  partial(pyotb.BandMathX, exp="im1"),
-#  partial(pyotb.Mosaic),
-#  partial(pyotb.MeanShiftSmoothing)
+  partial(pyotb.Smoothing, type="gaussian"),
+  partial(pyotb.BandMathX, exp="im1"),
+  partial(pyotb.Mosaic),
+  partial(pyotb.MeanShiftSmoothing)
 ]
 
 def compare():
@@ -52,5 +52,5 @@ def strategies():
       ext_fname["streaming:type"] = strategy
       app(pyotb.Prefetch(b4_href)).write(out, ext_fname=ext_fname)
  
-# compare()
+compare()
 strategies()
